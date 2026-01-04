@@ -13,10 +13,10 @@ const client = new Client()
 const database = new Databases(client);
 
 // Helper function to handle API errors
-const handleAppwriteError = (error) => {
-  console.error("Appwrite Error:", error);
-  throw error; // Re-throw for the calling function to handle
-};
+// const handleAppwriteError = (error) => {
+//   console.error("Appwrite Error:", error);
+//   throw error; // Re-throw for the calling function to handle
+// };
 
 export const updateSearchCount = async (searchTerm, movie) => {
   try {
@@ -39,7 +39,7 @@ export const updateSearchCount = async (searchTerm, movie) => {
       });
     }
   } catch (error) {
-    handleAppwriteError(error);
+    console.error(error);
   }
 };
 
