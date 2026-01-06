@@ -1,7 +1,8 @@
 # Movie Search App 🎬
 
 A React application for searching movies using TMDB API with trending functionality powered by Supabase.
-<img width="997" height="663" alt="Screenshot 2026-01-06 170438" src="https://github.com/user-attachments/assets/ac8a735f-d967-4b1a-9cf1-286353307da8" />
+<img width="536" height="292" alt="Screenshot 2026-01-06 170438" src="https://github.com/user-attachments/assets/ecc2cd39-a31e-43e0-8eb9-8ca7f4ce3601" />
+
 
 
 
