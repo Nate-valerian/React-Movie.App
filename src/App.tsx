@@ -111,7 +111,7 @@ const App = () => {
           />
         </header>
 
-        {Array.isArray(trendingMovies) && trendingMovies.length > 0 && (
+        {/* {Array.isArray(trendingMovies) && trendingMovies.length > 0 && (
           <section className="trending">
             <h2>Trending Movies</h2>
             <ul>
@@ -123,12 +123,11 @@ const App = () => {
               ))}
             </ul>
           </section>
-        )}
+        )} */}
 
-        {/* {trendingMovies.length > 0 && (
+        {trendingMovies.length > 0 && (
           <section className="trending">
             <h2>Trending Movies</h2>
-
             <ul>
               {trendingMovies.map((movie, index) => (
                 <li key={movie.$id}>
@@ -138,7 +137,7 @@ const App = () => {
               ))}
             </ul>
           </section>
-        )} */}
+        )}
 
         <section className="all-movies">
           <h2>All Movies</h2>

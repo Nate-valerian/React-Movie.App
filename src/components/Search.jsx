@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-const Search = ({ searchTerm, setSearchTerm }) => {
+const Search = ({ searchTerm, setSearchTerm, fetchMovies }) => {
   return (
     <div className="search">
       <div>
@@ -10,7 +10,7 @@ const Search = ({ searchTerm, setSearchTerm }) => {
           type="text"
           placeholder="Search through thousands of movies"
           value={searchTerm}
-          onChange={e => setSearchTerm(e.target.value)}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
     </div>

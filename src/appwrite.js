@@ -59,30 +59,67 @@ export const updateSearchCount = async (searchTerm, movie) => {
 
 export const getTrendingMovies = async () => {
   try {
-    console.log("Fetching trending (most searched) movies...");
+    console.log("Querying Appwrite for trending movies...");
 
-    // Get documents with count > 0, sorted by count descending
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
-      Query.greaterThan("count", 0), // Only get documents that have been searched
-      Query.orderDesc("count"), // Most searched first
-      Query.limit(5), // Top 5
+      Query.greaterThan("count", 0),
+      Query.orderDesc("count"),
+      Query.limit(5),
     ]);
 
-    console.log("Trending movies found:", result?.documents?.length || 0);
+    console.log("Raw trending result:", result);
 
-    // Log each movie for debugging
+    // Detailed logging of each document
     if (result.documents && result.documents.length > 0) {
-      console.log("Trending movies list:");
+      console.log("=== Document Details ===");
       result.documents.forEach((doc, index) => {
-        console.log(
-          `${index + 1}. "${doc.searchTerm}" - Searched ${doc.count} times`
-        );
+        console.log(`Document ${index + 1}:`, {
+          id: doc.$id,
+          searchTerm: doc.searchTerm,
+          title: doc.title,
+          count: doc.count,
+          poster_url: doc.poster_url,
+          movie_id: doc.movie_id,
+          allKeys: Object.keys(doc),
+        });
       });
+    } else {
+      console.log("No documents found with count > 0");
     }
 
     return result?.documents || [];
   } catch (error) {
-    console.error("Error fetching trending movies:", error);
-    return []; // Return empty array on error
+    console.error("Error in getTrendingMovies:", error);
+    return [];
   }
 };
+
+// export const getTrendingMovies = async () => {
+//   try {
+//     console.log("Fetching trending (most searched) movies...");
+
+//     // Get documents with count > 0, sorted by count descending
+//     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+//       Query.greaterThan("count", 0), // Only get documents that have been searched
+//       Query.orderDesc("count"), // Most searched first
+//       Query.limit(5), // Top 5
+//     ]);
+
+//     console.log("Trending movies found:", result?.documents?.length || 0);
+
+//     // Log each movie for debugging
+//     if (result.documents && result.documents.length > 0) {
+//       console.log("Trending movies list:");
+//       result.documents.forEach((doc, index) => {
+//         console.log(
+//           `${index + 1}. "${doc.searchTerm}" - Searched ${doc.count} times`
+//         );
+//       });
+//     }
+
+//     return result?.documents || [];
+//   } catch (error) {
+//     console.error("Error fetching trending movies:", error);
+//     return []; // Return empty array on error
+//   }
+// };
