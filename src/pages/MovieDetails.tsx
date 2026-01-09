@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "../lib/supabase";
+import { getCurrentUser } from "../lib/auth";
+import {
+  addToWatchlist,
+  removeFromWatchlist,
+  isInWatchlist,
+} from "../lib/watchlist";
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -21,6 +27,15 @@ interface MovieDetails {
       name: string;
       character: string;
       profile_path: string;
+      videos?: {
+        results: Array<{
+          key: string;
+          name: string;
+          site: string;
+          type: string;
+          official?: boolean;
+        }>;
+      };
     }>;
   };
 }
@@ -31,6 +46,9 @@ const MovieDetails = () => {
   const [movie, setMovie] = useState<MovieDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [user, setUser] = useState<any>(null);
+  const [inWatchlist, setInWatchlist] = useState(false);
+  const [watchlistLoading, setWatchlistLoading] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -44,13 +62,21 @@ const MovieDetails = () => {
       setError("");
 
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&append_to_response=credits`
+        `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&append_to_response=credits,videos`
       );
 
       if (!response.ok) throw new Error("Failed to fetch movie details");
 
       const data = await response.json();
       setMovie(data);
+      // added
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
+
+      if (currentUser) {
+        const exists = await isInWatchlist(movieId);
+        setInWatchlist(exists);
+      }
 
       // Log the view in Supabase
       await logMovieView(movieId, data.title);
@@ -59,6 +85,38 @@ const MovieDetails = () => {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const toggleWatchlist = async () => {
+    if (!movie) return;
+
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      alert("Please sign in to use Watchlist.");
+      return;
+    }
+
+    try {
+      setWatchlistLoading(true);
+
+      if (inWatchlist) {
+        await removeFromWatchlist(movie.id);
+        setInWatchlist(false);
+      } else {
+        await addToWatchlist({
+          id: movie.id,
+          title: movie.title,
+          poster_path: movie.poster_path,
+          release_date: movie.release_date,
+          vote_average: movie.vote_average,
+        });
+        setInWatchlist(true);
+      }
+    } catch (e: any) {
+      alert(e.message || "Watchlist action failed");
+    } finally {
+      setWatchlistLoading(false);
     }
   };
 
@@ -94,6 +152,16 @@ const MovieDetails = () => {
       </div>
     );
   }
+
+  // trailer
+  const trailer =
+    movie?.videos?.results?.find(
+      (v) => v.site === "YouTube" && v.type === "Trailer" && v.official
+    ) ||
+    movie?.videos?.results?.find(
+      (v) => v.site === "YouTube" && v.type === "Trailer"
+    ) ||
+    movie?.videos?.results?.find((v) => v.site === "YouTube");
 
   const releaseYear = movie.release_date
     ? new Date(movie.release_date).getFullYear()
@@ -150,6 +218,18 @@ const MovieDetails = () => {
                   ))}
                 </div>
               )}
+              
+              <button
+                className="watchlist-btn"
+                onClick={toggleWatchlist}
+                disabled={watchlistLoading}
+              >
+                {watchlistLoading
+                  ? "Saving..."
+                  : inWatchlist
+                    ? "✓ In Watchlist (Remove)"
+                    : "＋ Add to Watchlist"}
+              </button>
 
               {/* Runtime & Release Date */}
               <div className="movie-meta">
@@ -191,6 +271,38 @@ const MovieDetails = () => {
             <h2 className="section-heading">Overview</h2>
             <p className="movie-overview">{movie.overview}</p>
           </section>
+
+          {/* Trailer Section */}
+          {trailer && (
+            <section className="trailer-section" style={{ marginTop: "30px" }}>
+              <h2 className="section-heading">Trailer</h2>
+
+              <div
+                style={{
+                  position: "relative",
+                  paddingTop: "56.25%", // 16:9
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                  border: "1px solid rgba(139, 92, 246, 0.2)",
+                  background: "rgba(0,0,0,0.3)",
+                }}
+              >
+                <iframe
+                  src={`https://www.youtube.com/embed/${trailer.key}`}
+                  title={trailer.name}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    width: "100%",
+                    height: "100%",
+                    border: 0,
+                  }}
+                />
+              </div>
+            </section>
+          )}
 
           {/* Cast Section */}
           {movie.credits?.cast && movie.credits.cast.length > 0 && (
