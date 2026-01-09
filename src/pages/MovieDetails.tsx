@@ -135,9 +135,66 @@ const MovieDetails = () => {
   // Loading state
   if (loading) {
     return (
-      <div className="movie-details-loading">
-        <div className="spinner"></div>
-        <p>Loading movie details...</p>
+      <div className="movie-details-page">
+        <div className="container" style={{ paddingTop: 30 }}>
+          <div style={{ display: "flex", gap: 30, flexWrap: "wrap" }}>
+            <div
+              className="skeleton"
+              style={{ width: 280, height: 420, borderRadius: 12 }}
+            />
+            <div style={{ flex: 1, minWidth: 260 }}>
+              <div
+                className="skeleton"
+                style={{ height: 32, width: "70%", borderRadius: 10 }}
+              />
+              <div
+                className="skeleton"
+                style={{
+                  height: 16,
+                  width: "45%",
+                  borderRadius: 10,
+                  marginTop: 14,
+                }}
+              />
+              <div
+                className="skeleton"
+                style={{
+                  height: 16,
+                  width: "90%",
+                  borderRadius: 10,
+                  marginTop: 18,
+                }}
+              />
+              <div
+                className="skeleton"
+                style={{
+                  height: 16,
+                  width: "85%",
+                  borderRadius: 10,
+                  marginTop: 10,
+                }}
+              />
+              <div
+                className="skeleton"
+                style={{
+                  height: 48,
+                  width: 220,
+                  borderRadius: 12,
+                  marginTop: 22,
+                }}
+              />
+            </div>
+          </div>
+          <div
+            className="skeleton"
+            style={{
+              height: 240,
+              width: "100%",
+              borderRadius: 12,
+              marginTop: 34,
+            }}
+          />
+        </div>
       </div>
     );
   }
@@ -185,6 +242,8 @@ const MovieDetails = () => {
               <img
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 alt={movie.title}
+                loading="lazy"
+                decoding="async"
               />
             </div>
 
@@ -218,7 +277,7 @@ const MovieDetails = () => {
                   ))}
                 </div>
               )}
-              
+
               <button
                 className="watchlist-btn"
                 onClick={toggleWatchlist}

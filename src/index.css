@@ -947,6 +947,182 @@ body {
   opacity: 0.6;
   cursor: not-allowed;
 }
+/* Skeleton */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.14),
+    transparent
+  );
+  animation: skeletonShimmer 1.1s infinite;
+}
+
+@keyframes skeletonShimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Skeleton card layout */
+.skeleton-card {
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(30, 30, 46, 0.55);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.skeleton-poster {
+  height: 400px;
+  border-radius: 0;
+}
+
+.skeleton-line {
+  height: 14px;
+  margin: 12px 20px 0;
+}
+
+.skeleton-line.short {
+  width: 55%;
+}
+
+.skeleton-line.medium {
+  width: 75%;
+}
+
+.skeleton-line.long {
+  width: 90%;
+}
+
+.skeleton-footer {
+  margin: 16px 20px 20px;
+  height: 44px;
+  border-radius: 10px;
+}
+.empty-state {
+  text-align: center;
+  padding: 40px 16px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(30, 30, 46, 0.35);
+  border-radius: 14px;
+}
+
+.empty-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.empty-subtitle {
+  color: rgba(148, 163, 184, 0.95);
+  margin-bottom: 18px;
+}
+.poster-wrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.poster-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0;
+  transform: scale(1.02);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.poster-img.is-loaded {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.poster-skeleton {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.poster-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.14),
+    transparent
+  );
+  animation: skeletonShimmer 1.1s infinite;
+}
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  background: rgba(3, 0, 20, 0.65);
+  border-bottom: 1px solid rgba(139, 92, 246, 0.18);
+}
+
+.navbar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.nav-left {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.78);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 10px 12px;
+  border-radius: 12px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+}
+
+.nav-link.active {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(139, 92, 246, 0.28);
+  color: white;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
+
 
 /* @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");

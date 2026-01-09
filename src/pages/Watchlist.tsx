@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabase";
 import MovieCard from "../components/MovieCard";
 import { useNavigate } from "react-router-dom";
+import EmptyState from "../components/EmptyState";
 
 const Watchlist = () => {
   const [movies, setMovies] = useState<any[]>([]);
@@ -58,9 +59,12 @@ const Watchlist = () => {
       <h2 className="section-title">My Watchlist</h2>
 
       {movies.length === 0 ? (
-        <p style={{ color: "#94a3b8" }}>
-          Your watchlist is empty. Start adding movies ⭐
-        </p>
+        <EmptyState
+          title="Your watchlist is empty"
+          subtitle="Go back and add a few movies to see them here."
+          actionText="Browse movies"
+          onAction={() => navigate("/")}
+        />
       ) : (
         <div className="movies-grid">
           {movies.map((movie) => (

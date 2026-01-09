@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import Poster from "./Poster";
 
 const MovieCard = ({ movie }) => {
   const releaseYear = movie.release_date
@@ -14,11 +15,14 @@ const MovieCard = ({ movie }) => {
       <div className="movie-card">
         <div className="poster-container">
           {movie.poster_path ? (
-            <img
-              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+            <Poster
+              src={
+                movie.poster_path
+                  ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                  : null
+              }
               alt={movie.title}
               className="movie-poster"
-              loading="lazy"
             />
           ) : (
             <div className="no-poster">
