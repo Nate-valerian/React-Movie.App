@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 const Search = ({ searchTerm, setSearchTerm, fetchMovies }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetchMovies(searchTerm.trim());
+    fetchMovies(searchTerm.trim(), 1, false);
   };
 
   return (

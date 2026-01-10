@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import Search from "../components/Search";
 import MovieCard from "../components/MovieCard";
 import { useDebounce } from "react-use";
@@ -7,8 +6,8 @@ import { fetchGenres, discoverMovies, fetchTrendingMovies } from "../lib/tmdb";
 import { useNavigate } from "react-router-dom";
 import SkeletonCard from "../components/SkeletonCard";
 import EmptyState from "../components/EmptyState";
-import Poster from "../components/Poster";
 import { Link } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -19,7 +18,7 @@ const Home = () => {
   const [movieList, setMovieList] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [trendingMovies, setTrendingMovies] = useState<any[]>([]);
+  const [trendingMovies, setTrendingMovies] = useState([]);
 
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState<number | null>(null);
@@ -30,7 +29,6 @@ const Home = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const filtersActive = !!selectedGenre || !!year || !!rating;
   const navigate = useNavigate();
 
   useDebounce(() => setDebounceSearchTerm(searchTerm), 500, [searchTerm]);
@@ -70,44 +68,55 @@ const Home = () => {
   //   }
   // };
 
-  const fetchMovies = async (query = "", pageNum = 1, append = false) => {
-    if (pageNum === 1) {
-      setIsLoading(true);
-    } else {
-      setIsLoadingMore(true);
-    }
+  const fetchMovies = useCallback(
+    async (query = "", pageNum = 1, append = false) => {
+      const filtersActive = !!selectedGenre || !!year || !!rating;
+      const isSearching = query.trim().length > 0 && !filtersActive;
 
-    setErrorMessage("");
+      if (pageNum === 1) setIsLoading(true);
+      else setIsLoadingMore(true);
 
-    try {
-      const endpoint = query
-        ? `${API_BASE_URL}/search/movie?query=${encodeURIComponent(query)}&api_key=${API_KEY}&page=${pageNum}`
-        : `${API_BASE_URL}/movie/popular?api_key=${API_KEY}&page=${pageNum}`;
+      setErrorMessage("");
 
-      const response = await fetch(endpoint, { method: "GET" });
+      try {
+        let data;
 
-      if (!response.ok) throw new Error("Something went wrong");
+        if (isSearching) {
+          const endpoint = `${API_BASE_URL}/search/movie?query=${encodeURIComponent(
+            query
+          )}&api_key=${API_KEY}&page=${pageNum}`;
 
-      const data = await response.json();
+          const response = await fetch(endpoint);
+          if (!response.ok) throw new Error("Search failed");
+          data = await response.json();
 
-      setMovieList((prev) =>
-        append ? [...prev, ...(data.results || [])] : data.results || []
-      );
+          if (pageNum === 1 && data.results?.length > 0) {
+            await updateSearchCount(query, data.results[0]);
+          }
+        } else {
+          data = await discoverMovies({
+            genre: selectedGenre ?? undefined,
+            year: year ?? undefined,
+            rating: rating ?? undefined,
+            page: pageNum,
+          });
+        }
 
-      setHasMore(pageNum < (data.total_pages || 1));
+        setMovieList((prev) =>
+          append ? [...prev, ...(data.results || [])] : data.results || []
+        );
 
-      // only count search once (first page)
-      if (query && pageNum === 1 && data.results?.length > 0) {
-        await updateSearchCount(query, data.results[0]);
+        setHasMore(pageNum < (data.total_pages || 1));
+      } catch (error) {
+        console.error(error);
+        setErrorMessage("Something went wrong. Please try again later.");
+      } finally {
+        setIsLoading(false);
+        setIsLoadingMore(false);
       }
-    } catch (error) {
-      console.error(error);
-      setErrorMessage("Something went wrong. Please try again later.");
-    } finally {
-      setIsLoading(false);
-      setIsLoadingMore(false);
-    }
-  };
+    },
+    [selectedGenre, year, rating] // ✅ dependencies
+  );
 
   //loading
   const loadTrendingMovies = async () => {
@@ -125,30 +134,10 @@ const Home = () => {
     if (!hasMore || isLoadingMore) return;
 
     const nextPage = page + 1;
-
-    if (filtersActive) {
-      setIsLoadingMore(true);
-      try {
-        const data = await discoverMovies({
-          genre: selectedGenre ?? undefined,
-          year: year ?? undefined,
-          rating: rating ?? undefined,
-          page: nextPage,
-        });
-
-        setMovieList((prev) => [...prev, ...(data.results || [])]);
-        setPage(nextPage);
-        setHasMore(nextPage < (data.total_pages || 1));
-      } catch (error) {
-        setErrorMessage("Failed to load more movies");
-      } finally {
-        setIsLoadingMore(false);
-      }
-    } else {
-      await fetchMovies(debounceSearchTerm, nextPage, true);
-      setPage(nextPage);
-    }
+    await fetchMovies(debounceSearchTerm, nextPage, true);
+    setPage(nextPage);
   };
+
   // useEffect(() => {
   //   fetchMovies(debounceSearchTerm);
   // }, [debounceSearchTerm]);
@@ -162,35 +151,18 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const run = async () => {
-      // If filters are active, use Discover
-      if (filtersActive) {
-        setIsLoading(true);
-        setErrorMessage("");
+    setPage(1);
 
-        try {
-          const data = await discoverMovies({
-            genre: selectedGenre ?? undefined,
-            year: year ?? undefined,
-            rating: rating ?? undefined,
-          });
-          setMovieList(data.results || []);
-          setPage(1);
-          setHasMore(1 < (data.total_pages || 1));
-        } catch (error) {
-          setErrorMessage("Failed to load filtered movies");
-        } finally {
-          setIsLoading(false);
-        }
+    const filtersActive = !!selectedGenre || !!year || !!rating;
 
-        return;
-      }
+    // If filters are active, ignore debounced search entirely
+    if (filtersActive) {
+      fetchMovies("", 1, false);
+      return;
+    }
 
-      fetchMovies(debounceSearchTerm);
-    };
-
-    run();
-  }, [filtersActive, selectedGenre, year, rating, debounceSearchTerm]);
+    fetchMovies(debounceSearchTerm, 1, false);
+  }, [debounceSearchTerm, selectedGenre, year, rating, fetchMovies]);
 
   return (
     <div className="home-container">
@@ -200,31 +172,28 @@ const Home = () => {
           {/* LEFT: Copy + Actions */}
           <div className="hero-copy">
             <h1 className="hero-title">A Smarter Way to Find Movies</h1>
-            <p className="hero-kicker" >
-              Search, filter, and save what matters
-            </p>
+            <p className="hero-kicker">Search, filter, and save what matters</p>
             <p className="hero-desc">Search through thousands of movies</p>
 
             <div className="hero-actions">
               <Search
                 searchTerm={searchTerm}
-                setSearchTerm={(value) => {
-                  setSearchTerm(value);
-                  setSelectedGenre(null);
-                  setYear(null);
-                  setRating(null);
-                }}
+                setSearchTerm={setSearchTerm}
                 fetchMovies={fetchMovies}
               />
 
               <div className="filters-inline">
                 <select
                   value={selectedGenre ?? ""}
-                  onChange={(e) =>
+                  onChange={(e) => {
+                    setSearchTerm("");
+                    setDebounceSearchTerm(""); // ✅ THIS WAS MISSING
+                    setPage(1);
+
                     setSelectedGenre(
                       e.target.value ? Number(e.target.value) : null
-                    )
-                  }
+                    );
+                  }}
                   className="control-input"
                 >
                   <option value="">All Genres</option>
@@ -239,17 +208,25 @@ const Home = () => {
                   type="number"
                   placeholder="Year"
                   value={year ?? ""}
-                  onChange={(e) =>
-                    setYear(e.target.value ? Number(e.target.value) : null)
-                  }
+                  onChange={(e) => {
+                    setSearchTerm("");
+                    setDebounceSearchTerm(""); // ✅ THIS WAS MISSING
+                    setPage(1);
+
+                    setYear(e.target.value ? Number(e.target.value) : null);
+                  }}
                   className="control-input"
                 />
 
                 <select
                   value={rating ?? ""}
-                  onChange={(e) =>
-                    setRating(e.target.value ? Number(e.target.value) : null)
-                  }
+                  onChange={(e) => {
+                    setSearchTerm("");
+                    setDebounceSearchTerm(""); // ✅ THIS WAS MISSING
+                    setPage(1);
+
+                    setRating(e.target.value ? Number(e.target.value) : null);
+                  }}
                   className="control-input"
                 >
                   <option value="">Any Rating</option>
