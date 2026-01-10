@@ -23,12 +23,4 @@ A modern movie discovery app built with React. Search, filter, explore trending 
 - Vite
 - TMDB API (movie data)
 - CSS + Tailwind utilities (as configured in project)
-
-## 🚀 Getting Started
-
-## 1) Clone
-```bash
-git clone https://github.com/<YOUR_USERNAME>/<YOUR_REPO>.git
-cd <YOUR_REPO>
-
-
+  
