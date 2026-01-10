@@ -25,29 +25,11 @@ A modern movie discovery app built with React. Search, filter, explore trending 
 
 ## 🚀 Getting Started
 
-### 1) Clone
+## 1) Clone
 ```bash
 git clone https://github.com/<YOUR_USERNAME>/<YOUR_REPO>.git
 cd <YOUR_REPO>
 
-### 2) Install
-npm install
-
-### 3) Run locally
-npm run dev
-
-App will run at:
-http://localhost:5173
-
-🔑 Environment Variables (if required)
-If your project uses API keys, create a .env file in the root:
-VITE_TMDB_API_KEY=your_key_here
-✅ Do not commit .env to GitHub.
-
-
-### 📦 Build
-npm run build
-npm run preview
 
 
 
