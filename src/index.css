@@ -11,7 +11,6 @@
 }
 
 :root {
-  --bg0: #030014;
   --bg1: #0f0f23;
   --bg2: #1a1a2e;
 
@@ -21,11 +20,17 @@
   --purple: #8b5cf6;
   --purple2: #6366f1;
 
-  --card: rgba(30, 30, 46, 0.8);
-  --card2: rgba(30, 30, 46, 0.45);
+  --card: rgba(30, 30, 46, 0.55);
+  --cardHover: rgba(30, 30, 46, 0.7);
 
-  --border: rgba(139, 92, 246, 0.2);
+  --border: rgba(139, 92, 246, 0.22);
   --border2: rgba(139, 92, 246, 0.35);
+  --borderStrong: rgba(139, 92, 246, 0.45);
+}
+
+html,
+body {
+  overflow-x: hidden;
 }
 
 body {
@@ -49,7 +54,7 @@ body {
 }
 
 /* =========================
-   NAVBAR (single source of truth)
+   NAVBAR
 ========================= */
 .navbar {
   position: sticky;
@@ -64,7 +69,7 @@ body {
 .navbar-inner {
   max-width: 1100px;
   margin: 0 auto;
-  padding: 14px 16px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -89,9 +94,9 @@ body {
 .nav-link {
   color: rgba(255, 255, 255, 0.78);
   text-decoration: none;
-  font-weight: 600;
-  padding: 10px 12px;
-  border-radius: 12px;
+  font-weight: 700;
+  padding: 9px 11px;
+  border-radius: 11px;
   transition:
     background 0.2s ease,
     color 0.2s ease,
@@ -110,7 +115,7 @@ body {
 }
 
 /* =========================
-   INPUTS + BUTTONS (single source of truth)
+   INPUTS + BUTTONS
 ========================= */
 .control-input {
   height: 44px;
@@ -119,9 +124,9 @@ body {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--border2);
   color: white;
-  min-width: 170px;
   outline: none;
   font-size: 1rem;
+  min-width: 170px;
 }
 
 .control-input::placeholder {
@@ -146,11 +151,12 @@ body {
   transition:
     transform 0.08s ease,
     opacity 0.15s ease,
-    background 0.2s ease;
+    filter 0.2s ease;
 }
 
 .control-btn:hover:not(:disabled) {
   opacity: 0.92;
+  filter: brightness(1.04);
 }
 
 .control-btn:active:not(:disabled) {
@@ -160,17 +166,6 @@ body {
 .control-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-/* Optional: a “secondary” button look (use class in JSX if needed) */
-.control-btn.secondary {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(139, 92, 246, 0.28);
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.control-btn.secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
 }
 
 .auth-chip {
@@ -193,147 +188,6 @@ body {
   padding: 24px 16px 60px;
 }
 
-/* =========================
-   HERO (ONE VERSION: copy + media grid)
-========================= */
-.hero-section {
-  padding: 26px 0 18px;
-  margin-bottom: 22px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.hero-top {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 26px;
-  align-items: center;
-}
-
-.hero-copy {
-  text-align: left;
-}
-
-.hero-title {
-  font-size: clamp(2rem, 3.6vw, 3rem);
-  font-weight: 900;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  margin-bottom: 10px;
-  color: white;
-}
-
-.highlight {
-  color: var(--purple);
-  display: block;
-  margin-top: 6px;
-  font-size: 0.95em;
-}
-
-.hero-subtitle {
-  color: var(--muted);
-  font-size: 1.05rem;
-  line-height: 1.5;
-  margin-bottom: 16px;
-}
-
-.hero-actions {
-  display: grid;
-  gap: 14px;
-  max-width: 760px;
-}
-
-/* Search + filters */
-.search-container {
-  max-width: 100%;
-  margin: 0;
-}
-
-.search-form {
-  width: 100%;
-}
-
-.search-row {
-  display: flex;
-  gap: 14px;
-  align-items: center;
-  width: 100%;
-}
-
-.search-input-wide {
-  flex: 1;
-  min-width: 260px;
-}
-
-.filters-bar,
-.controls-bar,
-.filters-inline {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.filters-bar,
-.controls-bar {
-  justify-content: flex-start;
-}
-
-.hero-media {
-  align-items: center;
-}
-
-.hero-image-wrap {
-  position: relative;
-  width: min(580px, 96vw);
-  border-radius: 18px;
-  overflow: hidden;
-  margin: 0 auto;
-}
-
-.hero-image {
-  width: 100%;
-  display: block;
-  border-radius: 18px;
-  box-shadow: 0 15px 33px rgba(0, 0, 0, 0.55);
-  transform: translateZ(0);
-  transition: transform 0.25s ease;
-}
-.hero-top {
-  grid-template-columns: 1.05fr 0.95fr;
-}
-
-.hero-image-wrap:hover .hero-image {
-  transform: scale(1.015);
-}
-.hero-image-wrap {
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-.hero-shimmer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    120deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.22),
-    transparent 70%
-  );
-  transform: translateX(-120%);
-  transition: transform 0.7s ease;
-}
-
-.hero-image-wrap:hover .hero-shimmer {
-  transform: translateX(120%);
-}
-
-/* Optional CTA row */
-.below-hero-actions {
-  display: flex;
-  justify-content: center;
-  margin: 14px 0 4px;
-}
-
-/* Divider */
 .divider {
   height: 1px;
   background: linear-gradient(
@@ -346,23 +200,184 @@ body {
 }
 
 /* =========================
-   SECTIONS
+   HERO
 ========================= */
-.section-title {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 18px;
+.hero-section {
+  padding: 22px 0 18px;
+  margin-top: 6px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hero-top {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 26px;
+  align-items: center;
+
+  /* overflow safety */
+  min-width: 0;
+}
+
+.hero-copy,
+.hero-media {
+  min-width: 0;
+}
+
+.hero-copy {
+  text-align: left;
+}
+
+.hero-title {
+  font-size: clamp(2rem, 3.6vw, 3rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
   color: white;
 }
 
+.hero-kicker {
+  font-size: clamp(1.35rem, 3vw, 2.2rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin: 0 0 6px;
+  color: var(--purple);
+}
+
+.hero-desc {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin: 0 0 14px;
+  color: var(--muted);
+}
+
+.hero-actions {
+  display: grid;
+  gap: 12px;
+  max-width: 760px;
+}
+
+/* Search */
+.search-form {
+  width: 100%;
+}
+
+.search-row {
+  display: grid;
+  grid-template-columns: 1fr 120px;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+}
+
+.search-input-wide {
+  width: 100%;
+  min-width: 0; /* important in grid */
+}
+
+/* Filters row (keeps your “system” feel) */
+.filters-inline,
+.filters-bar,
+.controls-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  gap: 12px;
+  align-items: center;
+}
+
+/* Watchlist button inside same row -> full width */
+.filters-inline .control-btn,
+.filters-bar .control-btn,
+.controls-bar .control-btn {
+  width: 100%;
+}
+
+/* Hero media */
+.hero-media {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(139, 92, 246, 0.08) inset;
+}
+
+.hero-image {
+  width: 100%;
+  display: block;
+  border-radius: 18px;
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
+}
+
+.hero-image-wrap:hover .hero-image {
+  transform: scale(1.02);
+  filter: saturate(1.06) contrast(1.02);
+}
+
+/* Shimmer (reliable) */
+.hero-shimmer {
+  position: absolute;
+  inset: -40%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.28),
+    transparent 65%
+  );
+  transform: translateX(-60%) rotate(10deg);
+  opacity: 0;
+}
+
+@keyframes heroShimmerSweep {
+  0% {
+    transform: translateX(-60%) rotate(10deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(60%) rotate(10deg);
+    opacity: 0;
+  }
+}
+
+.hero-image-wrap:hover .hero-shimmer {
+  animation: heroShimmerSweep 0.9s ease forwards;
+}
+
+/* =========================
+   SECTIONS
+========================= */
 .section-head {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+.section-title {
+  font-size: 2rem;
+  font-weight: 900;
+  margin: 6px 0 14px;
+  color: white;
+}
+
 /* =========================
-   TRENDING (ONE VERSION)
+   TRENDING
 ========================= */
 .trending-section {
   margin-bottom: 21px;
@@ -374,71 +389,107 @@ body {
   gap: 16px;
 }
 
+.trending-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .trending-card {
   position: relative;
-  overflow: hidden; /* IMPORTANT: stops text bleeding out */
+  overflow: hidden;
   border-radius: 14px;
-  border: 1px solid rgba(139, 92, 246, 0.22);
-  background: rgba(30, 30, 46, 0.55);
-  display: grid;
-  grid-template-rows: auto auto; /* poster + meta */
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease;
+}
+
+/* Gradient hover overlay (cannot block clicks) */
+.trending-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.18),
+    rgba(99, 102, 241, 0.18)
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.trending-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.trending-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--borderStrong);
+}
+
+.trending-card:hover::before {
+  opacity: 1;
 }
 
 .trending-rank-badge {
   position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 2;
-  font-weight: 800;
-  font-size: 0.9rem;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
   padding: 6px 10px;
   border-radius: 999px;
-  background: rgba(139, 92, 246, 0.22);
-  border: 1px solid rgba(139, 92, 246, 0.28);
-  color: white;
+  background: rgba(20, 16, 45, 0.88);
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  font-weight: 900;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
 }
 
 .trending-poster-img {
   width: 100%;
-  aspect-ratio: 2 / 3; /* consistent posters */
+  aspect-ratio: 2 / 3;
   object-fit: cover;
   display: block;
 }
 
 .trending-meta {
-  padding: 12px 14px 14px;
-  display: grid;
-  gap: 8px;
+  padding: 14px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 92px;
 }
 
 .trending-title {
   margin: 0;
   font-size: 1rem;
-  font-weight: 800;
-  color: white;
+  font-weight: 900;
   line-height: 1.2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow: hidden; /* IMPORTANT: stop overflow */
+  overflow: hidden;
 }
 
 .trending-rating {
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 700;
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
   font-size: 0.95rem;
-}
-
-/* Responsive */
-@media (max-width: 1100px) {
-  .trending-grid {
-    grid-template-columns: repeat(2, minmax(220px, 1fr));
-  }
-}
-@media (max-width: 600px) {
-  .trending-grid {
-    grid-template-columns: 1fr;
-  }
+  color: rgba(255, 255, 255, 0.88);
 }
 
 /* =========================
@@ -457,16 +508,48 @@ body {
 }
 
 .movie-card {
-  background: var(--card);
-  border-radius: 12px;
-  overflow: hidden;
+  position: relative; /* IMPORTANT: anchors ::before */
+  border-radius: 14px;
   border: 1px solid var(--border);
+  background: var(--card);
+  overflow: hidden;
   height: 100%;
-  transition: transform 0.25s ease;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+/* Gradient wash hover overlay (cannot block clicks) */
+.movie-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.14),
+    rgba(99, 102, 241, 0.14)
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.movie-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .movie-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
+  background: var(--cardHover);
+  border-color: var(--borderStrong);
+}
+
+.movie-card:hover::before {
+  opacity: 1;
 }
 
 .poster-container {
@@ -486,13 +569,49 @@ body {
   transform: scale(1.05);
 }
 
+.no-poster {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 800;
+}
+
+.movie-rating {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 7px 10px;
+  border-radius: 999px;
+
+  background: rgba(20, 16, 45, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+  font-weight: 800;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.95);
+}
+
 .movie-info {
-  padding: 16px;
+  padding: 14px 14px 16px;
 }
 
 .movie-title {
-  font-size: 1.05rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1.2;
   margin-bottom: 6px;
   color: white;
 }
@@ -503,19 +622,47 @@ body {
   margin-bottom: 10px;
 }
 
-.movie-overview {
-  color: rgba(203, 213, 225, 0.95);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  margin-bottom: 14px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.movie-actions {
+  margin-top: 12px;
+}
+
+.movie-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 10px;
+
+  font-weight: 900;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
+
+  color: white;
+  background: linear-gradient(90deg, var(--purple) 0%, var(--purple2) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+
+  box-shadow:
+    0 6px 16px rgba(99, 102, 241, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+.movie-card:hover .movie-cta {
+  transform: translateY(-1px);
+  box-shadow:
+    0 10px 26px rgba(99, 102, 241, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  filter: brightness(1.05);
 }
 
 /* =========================
-   SKELETON + POSTER FADE
+   SKELETON
 ========================= */
 @keyframes skeletonShimmer {
   100% {
@@ -577,6 +724,7 @@ body {
   border-radius: 10px;
 }
 
+/* Poster fade helper */
 .poster-wrap {
   position: relative;
   border-radius: 12px;
@@ -747,7 +895,7 @@ body {
 }
 
 /* =========================
-   MOVIE DETAILS (scoped)
+   MOVIE DETAILS (SCOPED)
 ========================= */
 .movie-details-page {
   background: linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
@@ -874,7 +1022,7 @@ body {
   background: rgba(255, 255, 255, 0.06);
 }
 
-/* Buttons in details page */
+/* Details buttons */
 .back-button {
   background: rgba(30, 30, 46, 0.8);
   color: white;
@@ -945,9 +1093,35 @@ body {
 /* =========================
    RESPONSIVE
 ========================= */
+@media (max-width: 1100px) {
+  .trending-grid {
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+  }
+
+  .movies-grid {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+    gap: 16px;
+  }
+}
+
+/* Allow hero controls to shrink (prevents overflow on narrow desktop widths) */
+.hero-section .control-input {
+  min-width: 0;
+  width: 100%;
+}
+
+@media (max-width: 980px) {
+  .filters-inline,
+  .filters-bar,
+  .controls-bar {
+    grid-template-columns: repeat(2, minmax(140px, 1fr));
+  }
+}
+
 @media (max-width: 900px) {
   .hero-top {
     grid-template-columns: 1fr;
+    gap: 18px;
     text-align: center;
   }
 
@@ -955,582 +1129,62 @@ body {
     text-align: center;
   }
 
-  .filters-bar,
-  .controls-bar {
-    justify-content: center;
-  }
-}
-
-@media (max-width: 600px) {
-  .trending-grid {
+  .search-row {
     grid-template-columns: 1fr;
   }
-}
 
-@media (max-width: 520px) {
-  .search-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .search-input-wide,
   .search-row .control-btn {
     width: 100%;
   }
 
-  .movies-grid {
-    grid-template-columns: 1fr;
-  }
-}
-.movie-actions {
-  margin-top: 12px;
-}
-
-.movie-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-
-  padding: 8px 10px;
-  border-radius: 10px;
-
-  font-weight: 800;
-  font-size: 0.92rem;
-
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(139, 92, 246, 0.25);
-
-  transition:
-    transform 0.12s ease,
-    background 0.2s ease;
-}
-
-.movie-cta:hover {
-  background: rgba(255, 255, 255, 0.1);
-  transform: translateY(-1px);
-}
-/* ===== Movie card: rating badge (clean overlay) ===== */
-.poster-container {
-  position: relative;
-  height: 400px;
-  overflow: hidden;
-}
-
-.movie-rating {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-
-  padding: 7px 10px;
-  border-radius: 999px;
-
-  background: rgba(8, 6, 26, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-
-  font-weight: 800;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.95);
-}
-
-.movie-rating .star {
-  opacity: 0.9;
-  transform: translateY(-0.5px);
-}
-
-/* ===== Movie card: CTA button (nice again) ===== */
-/* ===== Movie card: GRADIENT CTA (premium) ===== */
-/* STEP 1 — Movie Card Gradient CTA */
-.movie-actions {
-  margin-top: 12px;
-}
-
-.movie-cta {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  height: 38px;
-  padding: 0 14px;
-  border-radius: 10px;
-
-  font-weight: 900;
-  font-size: 0.92rem;
-  letter-spacing: 0.01em;
-
-  color: white;
-  background: linear-gradient(90deg, #8b5cf6 0%, #6366f1 100%);
-  border: 1px solid rgba(139, 92, 246, 0.35);
-
-  box-shadow:
-    0 6px 16px rgba(99, 102, 241, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.25);
-
-  transition:
-    transform 0.12s ease,
-    box-shadow 0.2s ease,
-    filter 0.2s ease;
-}
-
-.movie-card:hover .movie-cta {
-  transform: translateY(-1px);
-  box-shadow:
-    0 10px 26px rgba(99, 102, 241, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
-  filter: brightness(1.05);
-}
-
-.movie-card:active .movie-cta {
-  transform: translateY(0);
-  box-shadow:
-    0 4px 10px rgba(99, 102, 241, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-/* Optional: make titles look tighter/pro */
-.movie-title {
-  font-size: 1rem;
-  line-height: 1.2;
-}
-.no-poster {
-  height: 100%;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.75);
-  font-weight: 800;
-}
-.movie-rating {
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-}
-/* STEP 2 — Trending Card Gradient Hover */
-
-.trending-card {
-  position: relative;
-  overflow: hidden;
-  transition:
-    transform 0.18s ease,
-    border-color 0.18s ease;
-}
-
-/* Gradient overlay */
-.trending-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-
-  background: linear-gradient(
-    135deg,
-    rgba(139, 92, 246, 0.18),
-    rgba(99, 102, 241, 0.18)
-  );
-
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-/* Keep content above gradient */
-.trending-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* Hover effect */
-.trending-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(139, 92, 246, 0.45);
-}
-
-.trending-card:hover::before {
-  opacity: 1;
-}
-/* FIX — Trending rank badge clarity */
-
-.trending-card::before {
-  z-index: 0; /* gradient stays at bottom */
-}
-
-/* Ensure badge is always on top */
-.trending-rank-badge {
-  z-index: 3;
-  background: rgba(20, 16, 45, 0.85); /* darker than gradient */
-  border: 1px solid rgba(139, 92, 246, 0.45);
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-.trending-rank-badge {
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-}
-/* FIX — make rank badge a real overlay (not a full-width row) */
-.trending-card {
-  position: relative; /* anchor for absolute badge */
-  overflow: hidden;
-}
-
-.trending-rank-badge {
-  position: absolute !important;
-  top: 12px;
-  left: 12px;
-  right: auto;
-  bottom: auto;
-
-  width: auto !important;
-  max-width: max-content;
-  display: inline-flex;
-  align-items: center;
-
-  padding: 6px 10px;
-  border-radius: 999px;
-
-  z-index: 10;
-
-  background: rgba(20, 16, 45, 0.88);
-  border: 1px solid rgba(139, 92, 246, 0.45);
-  box-shadow:
-    0 6px 16px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.18);
-
-  font-weight: 900;
-  font-size: 0.9rem;
-}
-/* STEP 3 — Trending meta alignment + consistent height */
-
-.trending-card {
-  display: flex;
-  flex-direction: column; /* poster on top, meta bottom */
-}
-
-.trending-poster-img {
-  width: 100%;
-  aspect-ratio: 2 / 3;
-  object-fit: cover;
-  display: block;
-}
-
-/* Meta block always looks balanced */
-.trending-meta {
-  padding: 14px 14px 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 92px; /* keeps cards equal even if title wraps */
-}
-
-/* Title: consistent clamp + tighter line height */
-.trending-title {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 900;
-  line-height: 1.2;
-
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Rating always sits at the bottom neatly */
-.trending-rating {
-  margin-top: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-
-  font-weight: 800;
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.88);
-} /* STEP 4 — Hero poster bigger + more depth */
-
-.hero-top {
-  grid-template-columns: 1.05fr 0.95fr; /* give media more room */
-}
-
-.hero-image-wrap {
-  width: min(540px, 96vw); /* bigger */
-  border-radius: 18px;
-  overflow: hidden;
-
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow:
-    0 18px 40px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(139, 92, 246, 0.08) inset;
-}
-
-/* Slight “premium” pop on hover (subtle) */
-.hero-image {
-  transition:
-    transform 0.25s ease,
-    filter 0.25s ease;
-}
-
-.hero-image-wrap:hover .hero-image {
-  transform: scale(1.02);
-  filter: saturate(1.06) contrast(1.02);
-}
-
-/* Keep shimmer classy */
-.hero-shimmer {
-  opacity: 0.7;
-}
-/* STEP 5 — Hero controls alignment + sizing */
-
-.hero-actions {
-  gap: 12px; /* slightly tighter than 14 */
-}
-
-/* Search row: consistent height + clean proportions */
-.search-row {
-  display: grid;
-  grid-template-columns: 1fr 120px; /* input + button */
-  gap: 12px;
-  align-items: center;
-}
-
-.search-input-wide {
-  min-width: 0; /* IMPORTANT for grid layouts */
-}
-
-/* Make search button match controls */
-.search-row .control-btn {
-  width: 120px;
-  justify-content: center;
-}
-
-/* Filters: align and feel like a system */
-.filters-inline,
-.filters-bar,
-.controls-bar {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(160px, 1fr));
-  gap: 12px;
-  align-items: center;
-}
-
-/* If you have a watchlist button in the same row, it becomes full-width in its cell */
-.filters-inline .control-btn,
-.filters-bar .control-btn,
-.controls-bar .control-btn {
-  width: 100%;
-}
-
-/* Tablet */
-@media (max-width: 900px) {
   .poster-container {
     height: 360px;
   }
-}
-@media (max-width: 520px) {
-  .poster-container {
-    height: 320px;
-  }
-}
 
-/* STEP 6 — Navbar height + hero breathing room */
-
-/* Slightly tighter navbar (more premium) */
-.navbar-inner {
-  padding: 12px 16px; /* was 14px */
-}
-
-/* Keep nav links from feeling chunky */
-.nav-link {
-  padding: 9px 11px;
-  border-radius: 11px;
-  font-weight: 700;
-}
-
-/* Add clean spacing between navbar and hero */
-.hero-section {
-  padding-top: 22px; /* was 26px */
-  margin-top: 6px;
-}
-
-/* Make hero headline block a bit tighter */
-.hero-title {
-  margin-bottom: 8px;
-}
-
-.hero-subtitle {
-  margin-bottom: 14px;
-}
-
-/* Make section titles sit consistently */
-.section-title {
-  margin-top: 6px;
-  margin-bottom: 14px;
-}
-
-/* Optional: soften overall “glow” so the page looks calmer */
-.trending-card,
-.movie-card {
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
-}
-/* STEP 7 — Movies cards match Trending system */
-
-.movie-card {
-  border-radius: 14px;
-  border: 1px solid rgba(139, 92, 246, 0.22);
-  background: rgba(30, 30, 46, 0.55);
-  overflow: hidden;
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease;
-}
-
-.movie-card:hover {
-  transform: translateY(-4px);
-  background: rgba(30, 30, 46, 0.7);
-  border-color: rgba(139, 92, 246, 0.45);
-}
-
-/* Gradient wash on hover (same as Trending) */
-.movie-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-
-  background: linear-gradient(
-    135deg,
-    rgba(139, 92, 246, 0.14),
-    rgba(99, 102, 241, 0.14)
-  );
-
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.movie-card:hover::before {
-  opacity: 1;
-}
-
-/* Ensure content stays above overlay */
-.movie-card > * {
-  position: relative;
-  z-index: 1;
-}
-
-/* Poster area stays clean */
-.poster-container {
-  position: relative;
-  height: 400px;
-  overflow: hidden;
-}
-
-/* Rating badge matches new style */
-.movie-rating {
-  background: rgba(20, 16, 45, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-}
-
-/* Text spacing feels consistent */
-.movie-info {
-  padding: 14px 14px 16px;
-}
-
-.movie-title {
-  font-size: 1rem;
-  font-weight: 900;
-  line-height: 1.2;
-}
-
-.movie-year {
-  margin-bottom: 10px;
-}
-/* STEP 8 — Mobile responsiveness polish */
-
-/* -------- HERO -------- */
-@media (max-width: 900px) {
-  .hero-top {
+  .movie-details-page .movie-header-content {
     grid-template-columns: 1fr;
-    gap: 18px;
+    justify-items: center;
+    text-align: center;
   }
 
-  .hero-media {
+  .movie-details-page .movie-poster-large img {
+    max-width: 260px;
+  }
+
+  .movie-details-page .movie-meta,
+  .movie-details-page .movie-genres {
     justify-content: center;
   }
-
-  .hero-image-wrap {
-    width: min(560px, 96vw);
-  }
 }
 
-@media (max-width: 520px) {
-  .hero-title {
-    font-size: 1.85rem;
-    line-height: 1.1;
-  }
-
-  .hero-subtitle {
-    font-size: 0.98rem;
-  }
-
-  .hero-image-wrap {
-    width: 100%;
-  }
-}
-
-/* -------- TRENDING GRID -------- */
-/* Force clean breakpoints so it never looks cramped */
-@media (max-width: 1100px) {
-  .trending-grid {
-    grid-template-columns: repeat(2, minmax(200px, 1fr));
-  }
-}
-@media (max-width: 600px) {
-  .trending-grid {
+@media (max-width: 640px) {
+  .filters-inline,
+  .filters-bar,
+  .controls-bar {
     grid-template-columns: 1fr;
   }
 }
 
-/* -------- ALL MOVIES GRID -------- */
-/* Keep cards readable on tablet & phone */
-@media (max-width: 1100px) {
-  .movies-grid {
-    grid-template-columns: repeat(2, minmax(220px, 1fr));
-    gap: 16px;
-  }
-}
 @media (max-width: 600px) {
+  .trending-grid {
+    grid-template-columns: 1fr;
+  }
+
   .movies-grid {
     grid-template-columns: 1fr;
   }
-}
 
-/* -------- POSTER HEIGHTS -------- */
-/* 400px is tall on phones; reduce progressively */
-@media (max-width: 900px) {
-  .poster-container {
-    height: 360px;
-  }
-}
-@media (max-width: 600px) {
   .poster-container {
     height: 320px;
   }
 }
+
 @media (max-width: 420px) {
   .poster-container {
     height: 290px;
   }
 }
 
-/* -------- NAVBAR WRAP SAFETY -------- */
-/* Prevent tiny screens from looking cramped */
 @media (max-width: 520px) {
   .navbar-inner {
     gap: 10px;
@@ -1543,49 +1197,5 @@ body {
   .nav-link {
     padding: 8px 10px;
     font-size: 0.92rem;
-  }
-}
-/* FIX — prevent horizontal scroll on narrow desktop widths */
-html,
-body {
-  overflow-x: hidden;
-}
-
-/* Grid overflow fix: allow columns to shrink */
-.hero-top,
-.hero-copy,
-.hero-media {
-  min-width: 0;
-}
-
-/* Let hero media never exceed its column */
-.hero-image-wrap {
-  width: 100%;
-  max-width: 580px; /* keeps it large on big screens, but never forces overflow */
-}
-
-/* Hero controls: remove hard min-widths in hero area */
-.hero-section .control-input {
-  min-width: 0;
-  width: 100%;
-}
-
-.hero-section .search-input-wide {
-  min-width: 0; /* remove the 260px forcing overflow */
-}
-
-/* If your filters row uses grid, make it adapt earlier */
-@media (max-width: 980px) {
-  .filters-inline,
-  .filters-bar,
-  .controls-bar {
-    grid-template-columns: repeat(2, minmax(140px, 1fr));
-  }
-}
-@media (max-width: 640px) {
-  .filters-inline,
-  .filters-bar,
-  .controls-bar {
-    grid-template-columns: 1fr;
   }
 }
