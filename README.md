@@ -1,38 +1,51 @@
-# Movie Search App 🎬
+# React Movie App 🎬
 
-A React application for searching movies using TMDB API with trending functionality powered by Supabase.
-<img width="536" height="292" alt="Screenshot 2026-01-06 170438" src="https://github.com/user-attachments/assets/ecc2cd39-a31e-43e0-8eb9-8ca7f4ce3601" />
+A modern movie discovery app built with React. Search, filter, explore trending titles, view detailed movie pages, and manage a personal watchlist — wrapped in a clean, responsive UI.
+![Home](screenshots/home.png)
+![Trending](screenshots/trending.png)
 
 
+## ✨ Features
 
+- 🔎 Search movies by title
+- 🎛️ Filter by genre, year, and rating
+- 📈 Trending movies section
+- 🎞️ Movie details page (overview, rating, etc.)
+- ⭐ Watchlist (save movies you want to watch)
+- 💅 Polished UI (gradient CTAs, consistent cards)
+- 📱 Responsive layout (desktop → mobile)
 
-## Features
-- 🔍 Search movies from TMDB database
-- 📊 Trending movies based on search popularity
-- 🎨 Modern UI with Tailwind CSS
-- ⚡ Fast and responsive design
-- 📱 Mobile-friendly interface
+## 🧱 Tech Stack
 
-## Tech Stack
-- **Frontend**: React, TypeScript, Vite
-- **Styling**: Tailwind CSS
-- **Database**: Supabase (PostgreSQL)
-- **API**: TMDB API
-- **Deployment**: Vercel
+- React
+- React Router
+- Vite
+- TMDB API (movie data)
+- CSS + Tailwind utilities (as configured in project)
 
-## Getting Started
+## 🚀 Getting Started
 
-### Prerequisites
-- Node.js 18+ and npm
-- TMDB API key (free from [TMDB](https://www.themoviedb.org/settings/api))
-- Supabase account (free from [Supabase](https://supabase.com))
-
-### Installation
-
-1. Clone the repository:
+### 1) Clone
 ```bash
-git clone https://github.com/nate-valerian/React-Movie.App.git
-cd React-Movie.App
+git clone https://github.com/<YOUR_USERNAME>/<YOUR_REPO>.git
+cd <YOUR_REPO>
+## 2) Install
+npm install
+## 3) Run locally
+npm run dev
+
+App will run at:
+
+http://localhost:5173
+
+🔑 Environment Variables (if required)
+
+If your project uses API keys, create a .env file in the root:
+VITE_TMDB_API_KEY=your_key_here
+✅ Do not commit .env to GitHub.
+## 📦 Build
+npm run build
+npm run preview
 
 
 
