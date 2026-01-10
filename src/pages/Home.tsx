@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import SkeletonCard from "../components/SkeletonCard";
 import EmptyState from "../components/EmptyState";
 import Poster from "../components/Poster";
+import { Link } from "react-router-dom";
 
 const API_BASE_URL = "https://api.themoviedb.org/3";
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
@@ -145,8 +146,7 @@ const Home = () => {
       }
     } else {
       await fetchMovies(debounceSearchTerm, nextPage, true);
-      setPage(1);
-      setHasMore(true);
+      setPage(nextPage);
     }
   };
   // useEffect(() => {
@@ -194,139 +194,144 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      {/* Hero Section with hero.png */}
+      {/* HERO */}
       <section className="hero-section">
-        <div className="hero-banner">
-          <img
-            src="/hero.png"
-            alt="AVATAR THE WAY OF WATER"
-            className="hero-image"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
+        <div className="hero-top">
+          {/* LEFT: Copy + Actions */}
+          <div className="hero-copy">
+            <h1 className="hero-title">A Smarter Way to Find Movies</h1>
+            <p className="hero-kicker" >
+              Search, filter, and save what matters
+            </p>
+            <p className="hero-desc">Search through thousands of movies</p>
 
-        <h1 className="hero-title">
-          Find Movies You'll Enjoy{" "}
-          <span className="highlight">Without the Hassle</span>
-        </h1>
+            <div className="hero-actions">
+              <Search
+                searchTerm={searchTerm}
+                setSearchTerm={(value) => {
+                  setSearchTerm(value);
+                  setSelectedGenre(null);
+                  setYear(null);
+                  setRating(null);
+                }}
+                fetchMovies={fetchMovies}
+              />
 
-        <p className="hero-subtitle">Search through thousands of movies</p>
+              <div className="filters-inline">
+                <select
+                  value={selectedGenre ?? ""}
+                  onChange={(e) =>
+                    setSelectedGenre(
+                      e.target.value ? Number(e.target.value) : null
+                    )
+                  }
+                  className="control-input"
+                >
+                  <option value="">All Genres</option>
+                  {genres.map((genre: any) => (
+                    <option key={genre.id} value={genre.id}>
+                      {genre.name}
+                    </option>
+                  ))}
+                </select>
 
-        <div className="search-container">
-          <Search
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            fetchMovies={fetchMovies}
-          />
+                <input
+                  type="number"
+                  placeholder="Year"
+                  value={year ?? ""}
+                  onChange={(e) =>
+                    setYear(e.target.value ? Number(e.target.value) : null)
+                  }
+                  className="control-input"
+                />
+
+                <select
+                  value={rating ?? ""}
+                  onChange={(e) =>
+                    setRating(e.target.value ? Number(e.target.value) : null)
+                  }
+                  className="control-input"
+                >
+                  <option value="">Any Rating</option>
+                  <option value="5">5+</option>
+                  <option value="6">6+</option>
+                  <option value="7">7+</option>
+                  <option value="8">8+</option>
+                </select>
+
+                <button
+                  className="control-btn"
+                  onClick={() => navigate("/watchlist")}
+                  type="button"
+                >
+                  ⭐ My Watchlist
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT: Image */}
+          <div className="hero-media">
+            <div className="hero-image-wrap">
+              <img src="/hero.png" alt="Hero" className="hero-image" />
+              <span className="hero-shimmer" />
+            </div>
+          </div>
         </div>
       </section>
 
-      <div className="controls-bar">
-        <button className="control-btn" onClick={() => navigate("/watchlist")}>
-          ⭐ My Watchlist
-        </button>
+      <div className="divider" />
 
-        <div className="filters-inline">
-          <select
-            value={selectedGenre ?? ""}
-            onChange={(e) =>
-              setSelectedGenre(e.target.value ? Number(e.target.value) : null)
-            }
-            className="control-input"
-          >
-            <option value="">All Genres</option>
-            {genres.map((genre) => (
-              <option key={genre.id} value={genre.id}>
-                {genre.name}
-              </option>
-            ))}
-          </select>
-
-          <input
-            type="number"
-            placeholder="Year"
-            value={year ?? ""}
-            onChange={(e) =>
-              setYear(e.target.value ? Number(e.target.value) : null)
-            }
-            className="control-input"
-          />
-
-          <select
-            value={rating ?? ""}
-            onChange={(e) =>
-              setRating(e.target.value ? Number(e.target.value) : null)
-            }
-            className="control-input"
-          >
-            <option value="">Any Rating</option>
-            <option value="5">5+</option>
-            <option value="6">6+</option>
-            <option value="7">7+</option>
-            <option value="8">8+</option>
-          </select>
-        </div>
-      </div>
-
-      <div className="divider"></div>
-      {/* Trending Movies */}
+      {/* TRENDING */}
       <section className="trending-section">
-        <h2 className="section-title">Trending Movies</h2>
+        <div className="section-head">
+          <h2 className="section-title">Trending Movies</h2>
+        </div>
 
         <div className="trending-grid">
           {trendingMovies.slice(0, 4).map((movie, index) => (
-            <div key={movie.id} className="trending-card">
-              <div className="trending-rank">#{index + 1}</div>
+            <Link
+              key={movie.id}
+              to={`/movie/${movie.id}`}
+              className="trending-card-link"
+            >
+              <div className="trending-card">
+                <div className="trending-rank-badge">#{index + 1}</div>
 
-              <div className="trending-poster">
-                <Poster
+                <img
+                  className="trending-poster-img"
                   src={
                     movie.poster_path
                       ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
-                      : null
+                      : "https://via.placeholder.com/92x138"
                   }
                   alt={movie.title}
+                  loading="lazy"
+                  decoding="async"
                 />
-              </div>
 
-              <div className="trending-info">
-                <h3>{movie.title}</h3>
-                <p className="search-count">
-                  ⭐ {movie.vote_average?.toFixed(1) ?? "N/A"}
-                </p>
+                <div className="trending-meta">
+                  <h3 className="trending-title">{movie.title}</h3>
+                  <p className="trending-rating">
+                    ⭐ {movie.vote_average?.toFixed(1) ?? "N/A"}
+                  </p>
+                </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
 
-      <div className="divider"></div>
+      <div className="divider" />
 
-      {/* All Movies */}
+      {/* ALL MOVIES */}
       <section className="all-movies-section">
-        <h2 className="section-title">All Movies</h2>
+        <div className="section-head">
+          <h2 className="section-title">All Movies</h2>
+        </div>
 
         {isLoading ? (
           <div className="movies-grid">
-            {!isLoading && !errorMessage && movieList.length > 0 && hasMore && (
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: 24,
-                }}
-              >
-                <button
-                  className="control-btn"
-                  onClick={loadMore}
-                  disabled={isLoadingMore}
-                >
-                  {isLoadingMore ? "Loading..." : "Load More"}
-                </button>
-              </div>
-            )}
-
             {Array.from({ length: 8 }).map((_, i) => (
               <SkeletonCard key={i} />
             ))}
@@ -350,15 +355,200 @@ const Home = () => {
             }}
           />
         ) : (
-          <div className="movies-grid">
-            {movieList.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
-          </div>
+          <>
+            <div className="movies-grid">
+              {movieList.map((movie: any) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </div>
+
+            {/* ✅ Load more belongs here */}
+            {hasMore && (
+              <div className="load-more-wrap">
+                <button
+                  className="control-btn"
+                  onClick={loadMore}
+                  disabled={isLoadingMore}
+                >
+                  {isLoadingMore ? "Loading..." : "Load More"}
+                </button>
+              </div>
+            )}
+          </>
         )}
       </section>
     </div>
   );
 };
-
 export default Home;
+// return (
+//   <div className="home-container">
+//     {/* Hero Section with hero.png */}
+//     <section className="hero-section">
+//       <div className="hero-banner">
+//         <div className="hero-image-wrap">
+//           <img src="/hero.png" alt="Hero" className="hero-image" />
+//           <span className="hero-shimmer" />
+//         </div>
+
+//         <div className="hero-text">
+//           <h1>Find Movies You'll Enjoy</h1>
+//           <p className="hero-subtitle text-gradient">Without the Hassle</p>
+//           <p className="hero-desc">Search through thousands of movies</p>
+//         </div>
+
+//         <div className="hero-controls">
+//           <Search
+//             searchTerm={searchTerm}
+//             setSearchTerm={setSearchTerm}
+//             fetchMovies={fetchMovies}
+//           />
+//         </div>
+//       </div>
+//     </section>
+
+//     <div className="controls-bar">
+//       <button className="control-btn" onClick={() => navigate("/watchlist")}>
+//         ⭐ My Watchlist
+//       </button>
+
+//       <div className="filters-inline">
+//         <select
+//           value={selectedGenre ?? ""}
+//           onChange={(e) =>
+//             setSelectedGenre(e.target.value ? Number(e.target.value) : null)
+//           }
+//           className="control-input"
+//         >
+//           <option value="">All Genres</option>
+//           {genres.map((genre) => (
+//             <option key={genre.id} value={genre.id}>
+//               {genre.name}
+//             </option>
+//           ))}
+//         </select>
+
+//         <input
+//           type="number"
+//           placeholder="Year"
+//           value={year ?? ""}
+//           onChange={(e) =>
+//             setYear(e.target.value ? Number(e.target.value) : null)
+//           }
+//           className="control-input"
+//         />
+
+//         <select
+//           value={rating ?? ""}
+//           onChange={(e) =>
+//             setRating(e.target.value ? Number(e.target.value) : null)
+//           }
+//           className="control-input"
+//         >
+//           <option value="">Any Rating</option>
+//           <option value="5">5+</option>
+//           <option value="6">6+</option>
+//           <option value="7">7+</option>
+//           <option value="8">8+</option>
+//         </select>
+//       </div>
+//     </div>
+
+//     <div className="divider"></div>
+//     {/* Trending Movies */}
+//     <section className="trending-section">
+//       <h2 className="section-title">Trending Movies</h2>
+
+//       <div className="trending-grid">
+//         {trendingMovies.slice(0, 4).map((movie, index) => (
+//           <Link
+//             key={movie.id}
+//             to={`/movie/${movie.id}`}
+//             className="trending-card-link"
+//           >
+//             <div className="trending-card">
+//               <div className="trending-rank">#{index + 1}</div>
+
+//               <div className="trending-poster">
+//                 <img
+//                   src={
+//                     movie.poster_path
+//                       ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+//                       : "https://via.placeholder.com/60x90"
+//                   }
+//                   alt={movie.title}
+//                   loading="lazy"
+//                   decoding="async"
+//                 />
+//               </div>
+
+//               <div className="trending-info">
+//                 <h3>{movie.title}</h3>
+//                 <p className="search-count">
+//                   ⭐ {movie.vote_average?.toFixed(1) ?? "N/A"}
+//                 </p>
+//               </div>
+//             </div>
+//           </Link>
+//         ))}
+//       </div>
+//     </section>
+
+//     <div className="divider"></div>
+
+//     {/* All Movies */}
+//     <section className="all-movies-section">
+//       <h2 className="section-title">All Movies</h2>
+
+//       {isLoading ? (
+//         <div className="movies-grid">
+//           {!isLoading && !errorMessage && movieList.length > 0 && hasMore && (
+//             <div
+//               style={{
+//                 display: "flex",
+//                 justifyContent: "center",
+//                 marginTop: 24,
+//               }}
+//             >
+//               <button
+//                 className="control-btn"
+//                 onClick={loadMore}
+//                 disabled={isLoadingMore}
+//               >
+//                 {isLoadingMore ? "Loading..." : "Load More"}
+//               </button>
+//             </div>
+//           )}
+
+//           {Array.from({ length: 8 }).map((_, i) => (
+//             <SkeletonCard key={i} />
+//           ))}
+//         </div>
+//       ) : errorMessage ? (
+//         <EmptyState
+//           title="Something went wrong"
+//           subtitle={errorMessage}
+//           actionText="Retry"
+//           onAction={() => fetchMovies(debounceSearchTerm)}
+//         />
+//       ) : movieList.length === 0 ? (
+//         <EmptyState
+//           title="No movies found"
+//           subtitle="Try a different keyword or adjust your filters."
+//           actionText="Clear filters"
+//           onAction={() => {
+//             setSelectedGenre(null);
+//             setYear(null);
+//             setRating(null);
+//           }}
+//         />
+//       ) : (
+//         <div className="movies-grid">
+//           {movieList.map((movie) => (
+//             <MovieCard key={movie.id} movie={movie} />
+//           ))}
+//         </div>
+//       )}
+//     </section>
+//   </div>
+// );

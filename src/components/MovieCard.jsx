@@ -41,7 +41,7 @@ const MovieCard = ({ movie }) => {
           <p className="movie-year">{releaseYear}</p>
 
           <div className="movie-actions">
-            <button className="details-button">View Details →</button>
+            <span className="movie-cta">View Details →</span>
           </div>
         </div>
       </div>

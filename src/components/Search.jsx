@@ -1,26 +1,28 @@
 import React from "react";
-
 import PropTypes from "prop-types";
 
 const Search = ({ searchTerm, setSearchTerm, fetchMovies }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (searchTerm.trim()) {
-      fetchMovies(searchTerm);
-    }
+    fetchMovies(searchTerm.trim());
   };
 
   return (
     <form onSubmit={handleSubmit} className="search-form">
-      <div className="search-input-group">
+      <div className="search-row">
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search for movies..."
-          className="search-input"
+          className="control-input search-input-wide"
         />
-        <button type="submit" className="search-button">
+
+        <button
+          type="submit"
+          className="control-btn"
+          disabled={!searchTerm.trim()}
+        >
           Search
         </button>
       </div>
