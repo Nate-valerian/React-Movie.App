@@ -6,7 +6,7 @@ A modern movie discovery app built with React. Search, filter, explore trending 
 
 
 
-## ✨ Features
+# ✨ Features
 
 - 🔎 Search movies by title
 - 🎛️ Filter by genre, year, and rating
@@ -16,7 +16,7 @@ A modern movie discovery app built with React. Search, filter, explore trending 
 - 💅 Polished UI (gradient CTAs, consistent cards)
 - 📱 Responsive layout (desktop → mobile)
 
-## 🧱 Tech Stack
+# 🧱 Tech Stack
 
 - React
 - React Router
