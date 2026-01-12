@@ -10,35 +10,78 @@ import {
 
 const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
+type Genre = {
+  id: number;
+  name: string;
+};
+
+type CastMember = {
+  id: number;
+  name: string;
+  character?: string;
+  profile_path?: string | null;
+};
+
+type Video = {
+  id: string;
+  key: string;
+  name: string;
+  site: string; // usually "YouTube"
+  type: string; // e.g. "Trailer", "Teaser"
+  official?: boolean;
+};
+
 interface MovieDetails {
   id: number;
   title: string;
   overview: string;
-  poster_path: string;
-  backdrop_path: string;
+  poster_path: string | null;
   release_date: string;
-  runtime: number;
   vote_average: number;
   vote_count: number;
-  genres: { id: number; name: string }[];
+  runtime?: number;
+  status?: string;
+
+  genres?: Genre[];
+
   credits?: {
-    cast: Array<{
-      id: number;
-      name: string;
-      character: string;
-      profile_path: string;
-      videos?: {
-        results: Array<{
-          key: string;
-          name: string;
-          site: string;
-          type: string;
-          official?: boolean;
-        }>;
-      };
-    }>;
+    cast?: CastMember[];
+  };
+
+  videos?: {
+    results?: Video[];
   };
 }
+
+// interface MovieDetails {
+//   id: number;
+//   title: string;
+//   overview: string;
+//   poster_path: string;
+//   backdrop_path: string;
+//   release_date: string;
+//   runtime: number;
+//   vote_average: number;
+//   vote_count: number;
+//   genres: { id: number; name: string }[];
+//   credits?: {
+//     cast: Array<{
+//       id: number;
+//       name: string;
+//       character: string;
+//       profile_path: string;
+//       videos?: {
+//         results: Array<{
+//           key: string;
+//           name: string;
+//           site: string;
+//           type: string;
+//           official?: boolean;
+//         }>;
+//       };
+//     }>;
+//   };
+// }
 
 const MovieDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -237,7 +280,7 @@ const MovieDetails = () => {
       <div className="movie-header">
         <div className="container">
           <div className="movie-header-content">
-            {/* Movie Poster */}
+            {/* 1) Poster */}
             <div className="movie-poster-large">
               <img
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -247,14 +290,13 @@ const MovieDetails = () => {
               />
             </div>
 
-            {/* Movie Info */}
+            {/* 2) Info */}
             <div className="movie-info">
               <h1 className="movie-title">
                 {movie.title}{" "}
                 <span className="movie-year">({releaseYear})</span>
               </h1>
 
-              {/* Rating */}
               <div className="movie-rating-section">
                 <div className="rating-badge">
                   <span className="star">⭐</span>
@@ -267,7 +309,6 @@ const MovieDetails = () => {
                 </div>
               </div>
 
-              {/* Genres */}
               {movie.genres && movie.genres.length > 0 && (
                 <div className="movie-genres">
                   {movie.genres.map((genre) => (
@@ -290,7 +331,6 @@ const MovieDetails = () => {
                     : "＋ Add to Watchlist"}
               </button>
 
-              {/* Runtime & Release Date */}
               <div className="movie-meta">
                 {movie.runtime && (
                   <div className="meta-item">
@@ -318,9 +358,36 @@ const MovieDetails = () => {
                 )}
               </div>
             </div>
+
+            {/* 3) NEW: Right column */}
+            <aside className="movie-aside">
+              {trailer ? (
+                <div className="trailer-card">
+                  <div className="trailer-card-title">Trailer</div>
+
+                  <div className="trailer-embed">
+                    <iframe
+                      src={`https://www.youtube.com/embed/${trailer.key}`}
+                      title={trailer.name}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="trailer-card">
+                  <div className="trailer-card-title">Quick info</div>
+                  <p className="trailer-card-muted">
+                    No trailer found for this movie.
+                  </p>
+                </div>
+              )}
+            </aside>
           </div>
         </div>
       </div>
+
+      <div className="divider" />
 
       {/* Main Content */}
       <div className="container">
@@ -332,7 +399,7 @@ const MovieDetails = () => {
           </section>
 
           {/* Trailer Section */}
-          {trailer && (
+          {/* {trailer && (
             <section className="trailer-section" style={{ marginTop: "30px" }}>
               <h2 className="section-heading">Trailer</h2>
 
@@ -361,7 +428,7 @@ const MovieDetails = () => {
                 />
               </div>
             </section>
-          )}
+          )} */}
 
           {/* Cast Section */}
           {movie.credits?.cast && movie.credits.cast.length > 0 && (
