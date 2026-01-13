@@ -1,5 +1,5 @@
 # React Movie App 🎬
-
+# I focused on component separation, single source of truth, and clean UI refactoring
 A modern movie discovery app built with React. Search, filter, explore trending titles, view detailed movie pages, and manage a personal watchlist — wrapped in a clean, responsive UI.
 
 <img width="1007" height="900" alt="third" src="https://github.com/user-attachments/assets/b94b6ddc-8056-4bdd-b048-83df4c2a31e7" />
